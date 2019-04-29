@@ -1,0 +1,57 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <title>Pony Express Challenge</title>
+</head>
+
+<body>
+    <h1>Pony Express Challenge </h1>
+API: <input type="text" id="api_key">  page <input type="text" id="pageNumber"> PageSize <input type="text" id="pageSize"><br/>
+<button onclick="getcon()">Get Contacts</button><br/>
+<p id='pp'>Contacts will be displayed here !</p>
+<script>
+
+
+function getcon() {
+  var x = document.getElementById('api_key').value;
+  var pageNumber = document.getElementById('pageNumber').value;
+  var pageSize = document.getElementById('pageSize').value;
+
+    var data = {
+       api_key: x,
+       page: pageNumber,
+       pageS: pageSize,
+   };
+    $.ajax({
+        type: 'POST',
+        url:'/customers',
+        contentType: 'application/JSON; charset=utf-8',
+        data: JSON.stringify(data),
+        // data:"fffff",
+        success: funcSuccess,
+        error: funcFail
+    });
+    function funcSuccess(res) {
+        let customers=res;
+        var x;
+        document.getElementById("pp").innerHTML = "";
+        if(customers == "0")
+        {
+            document.getElementById("pp").innerHTML = "No such user present";
+        }
+        else{
+            for(x=0;x<customers.length;x++){
+                 $("#pp").append(JSON.stringify(customers[x])+'<br/>');
+            }
+        }      
+    }
+    function funcFail() { $("#pp").text('Login Failed'); };
+};
+
+</script>
+</body>
+</html>
